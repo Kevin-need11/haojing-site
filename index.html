@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>好厝安居｜出租屋輕裝修・退租一條龍・包租代管</title>
+<meta name="description" content="好厝安居——雙北出租屋輕裝修、退租整理一條龍、包租代管與專業清潔。報價透明、工種分項、完工細清交屋，讓每一間房子住得安心、租得順利。">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;}
+:root{--walnut:#5A3A28;--gold:#C4A24A;--cream:#F7F1E5;--ink:#3a2c22;}
+body{background:var(--cream);color:var(--ink);}
+/* header */
+.nav{position:fixed;top:0;left:0;width:100%;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px 5vw;background:rgba(247,241,229,.97);box-shadow:0 2px 12px rgba(90,58,40,.08);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo svg{width:40px;height:40px;}
+.logo b{font-size:24px;font-weight:900;color:var(--walnut);letter-spacing:1px;}
+.menu{display:flex;gap:26px;font-size:16px;font-weight:500;}
+.menu a{color:var(--walnut);text-decoration:none;cursor:pointer;}
+.navcta{background:#06C755;color:#fff;font-size:15px;font-weight:700;padding:9px 20px;border-radius:22px;text-decoration:none;}
+@media(max-width:760px){.menu{display:none;}}
+/* carousel */
+.carousel{position:relative;height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:center;}
+.slide.on{opacity:1;z-index:2;}
+.bg{position:absolute;inset:0;}.bg img{width:100%;height:100%;object-fit:cover;}
+.ov{position:absolute;inset:0;background:linear-gradient(100deg,rgba(45,28,20,.85),rgba(45,28,20,.3) 65%,transparent);}
+.inner{position:relative;z-index:3;padding:0 6vw;max-width:680px;color:#fff;}
+.tag{display:inline-block;border:1.5px solid var(--gold);color:var(--gold);font-size:15px;font-weight:700;padding:6px 18px;border-radius:20px;letter-spacing:2px;}
+.inner h1{font-size:clamp(34px,6vw,58px);font-weight:900;line-height:1.2;margin:18px 0 14px;}
+.inner h1 .g{color:var(--gold);}
+.inner p{font-size:clamp(16px,2.4vw,21px);line-height:1.7;color:#f0e6d5;margin-bottom:28px;}
+.btns{display:flex;gap:14px;flex-wrap:wrap;}
+.bg-g{background:var(--gold);color:#3a2810;font-weight:700;padding:14px 30px;border-radius:28px;text-decoration:none;font-size:17px;}
+.bo{color:#fff;border:1.5px solid #fff;font-weight:700;padding:14px 30px;border-radius:28px;text-decoration:none;font-size:17px;}
+/* services slide */
+.svcS{background:var(--cream);align-items:center;}
+.svcWrap{position:relative;z-index:3;width:100%;padding:100px 6vw 0;}
+.sh{text-align:center;margin-bottom:36px;}.sh .en{font-size:13px;color:var(--gold);letter-spacing:4px;font-weight:700;}
+.sh h2{font-size:clamp(28px,4vw,42px);font-weight:900;color:var(--walnut);margin-top:6px;}
+.svc{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+@media(max-width:760px){.svc{grid-template-columns:1fr 1fr;}}
+.card{background:#fff;border:1px solid #eadfc8;border-radius:18px;padding:28px 20px;text-align:center;box-shadow:0 8px 20px rgba(90,58,40,.08);}
+.card .ic{font-size:40px;}.card h3{font-size:21px;font-weight:700;color:var(--walnut);margin:12px 0 8px;}
+.card p{font-size:14px;color:#8a7d6d;line-height:1.6;}
+/* case slide split */
+.caseS{background:#2d1c14;}
+.caseSplit{position:absolute;inset:0;display:flex;}.caseSplit .h{width:50%;position:relative;overflow:hidden;}
+.caseSplit img{width:100%;height:100%;object-fit:cover;}
+.lb{position:absolute;bottom:8vh;left:6%;background:rgba(45,28,20,.75);color:#fff;font-size:18px;font-weight:700;padding:8px 20px;border-radius:16px;}
+.lb.a{background:var(--gold);color:#3a2810;left:auto;right:6%;}
+.caseTxt{position:absolute;top:16vh;left:0;width:100%;text-align:center;color:#fff;z-index:3;}
+.caseTxt .en{font-size:13px;color:var(--gold);letter-spacing:4px;font-weight:700;}
+.caseTxt h2{font-size:clamp(30px,5vw,46px);font-weight:900;margin-top:6px;text-shadow:0 2px 18px rgba(0,0,0,.5);}
+.caseTxt p{font-size:18px;color:#e8dcc6;margin-top:8px;}
+/* cta slide */
+.ctaS{background:linear-gradient(120deg,var(--walnut),#7A4E36);align-items:center;justify-content:center;text-align:center;}
+.ctaIn{position:relative;z-index:3;color:#fff;padding:0 6vw;}
+.ctaIn .en{font-size:14px;color:var(--gold);letter-spacing:5px;font-weight:700;}
+.ctaIn h2{font-size:clamp(34px,6vw,54px);font-weight:900;margin:12px 0 14px;}.ctaIn h2 .g{color:var(--gold);}
+.ctaIn p{font-size:clamp(16px,2.4vw,21px);color:#f0e6d5;margin-bottom:30px;}
+.ctaIn .big{display:inline-block;background:var(--gold);color:#3a2810;font-size:20px;font-weight:800;padding:18px 44px;border-radius:34px;text-decoration:none;}
+/* controls */
+.dots{position:absolute;right:26px;top:50%;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:14px;}
+.dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.45);border:none;cursor:pointer;}
+.dot.on{background:var(--gold);box-shadow:0 0 0 4px rgba(196,162,74,.3);}
+.arrows{position:absolute;bottom:34px;right:6vw;z-index:20;display:flex;gap:10px;}
+.arrows button{width:48px;height:48px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);background:rgba(0,0,0,.15);font-size:22px;cursor:pointer;}
+.pgno{position:absolute;bottom:42px;left:6vw;z-index:20;font-size:15px;color:var(--gold);font-weight:700;letter-spacing:2px;}
+/* float LINE */
+.floatLine{position:fixed;right:22px;bottom:22px;z-index:60;background:#06C755;color:#fff;font-size:17px;font-weight:700;padding:14px 22px;border-radius:30px;box-shadow:0 8px 24px rgba(6,199,85,.4);text-decoration:none;}
+/* footer */
+.ft{background:var(--walnut);color:#e8dcc6;padding:48px 6vw 26px;}
+.ftTop{display:flex;flex-wrap:wrap;gap:30px;justify-content:space-between;border-bottom:1px solid #6b4a34;padding-bottom:26px;margin-bottom:20px;}
+.ft h3{font-size:24px;font-weight:900;color:#fff;}.ft .sub{color:#c9b593;margin-top:8px;font-size:15px;}
+.ft h5{font-size:15px;color:var(--gold);margin-bottom:10px;}.ft .col div{font-size:15px;line-height:1.95;color:#d8c8ae;}
+.ft .cp{text-align:center;font-size:13px;color:#a88f70;}
+</style></head>
+<body>
+
+<header class="nav">
+  <div class="logo"><svg viewBox="0 0 100 100"><path d="M50 12 L88 46 L78 46 L78 88 L22 88 L22 46 L12 46 Z" fill="#5A3A28"/><path d="M50 12 L88 46 L78 46 L50 22 L22 46 L12 46 Z" fill="#C4A24A"/><rect x="42" y="60" width="16" height="28" fill="#C4A24A"/></svg><b>好厝安居</b></div>
+  <nav class="menu"><a onclick="go(0)">首頁</a><a onclick="go(1)">服務</a><a onclick="go(2)">案例</a><a href="#know">知識</a><a href="#ft">關於</a></nav>
+  <a class="navcta" href="#">＋ LINE 諮詢</a>
+</header>
+
+<section class="carousel" id="car">
+  <!-- 1 hero -->
+  <div class="slide on"><div class="bg"><img src="reel/living_after.jpg"></div><div class="ov"></div>
+    <div class="inner"><span class="tag">出租屋輕裝修 · 包租代管</span>
+      <h1>讓每一間房子<br><span class="g">住得安心、租得順利</span></h1>
+      <p>輕裝修、退租整理、清潔、包租代管——好厝一條龍，把空屋變成會賺錢的房子。</p>
+      <div class="btns"><a class="bg-g" href="#">＋ LINE 免費諮詢</a><a class="bo" href="#">30 秒報價試算</a></div></div></div>
+  <!-- 2 services -->
+  <div class="slide svcS"><div class="svcWrap"><div class="sh"><div class="en">OUR SERVICES</div><h2>好厝的四大服務</h2></div>
+    <div class="svc">
+      <div class="card"><div class="ic">🔨</div><h3>出租屋輕裝修</h3><p>老屋翻新、壁癌處理、水電泥作油漆，讓房子好租。</p></div>
+      <div class="card"><div class="ic">📦</div><h3>退租一條龍</h3><p>清空、清運、細清到交屋，馬上能再出租。</p></div>
+      <div class="card"><div class="ic">🏠</div><h3>包租代管</h3><p>空租、修繕、管理租客都交給我們。</p></div>
+      <div class="card"><div class="ic">🧹</div><h3>專業清潔</h3><p>公區清潔、定期打掃、垃圾代收。</p></div></div></div></div>
+  <!-- 3 case -->
+  <div class="slide caseS"><div class="caseSplit"><div class="h"><img src="reel/living_before.jpg"><span class="lb">改造前</span></div><div class="h"><img src="reel/living_after.jpg"><span class="lb a">改造後</span></div></div>
+    <div class="caseTxt"><div class="en">BEFORE / AFTER</div><h2>照片會說話</h2><p>都是好厝實際做的案場 · 客廳全室翻新</p></div></div>
+  <!-- 4 cta -->
+  <div class="slide ctaS"><div class="ctaIn"><div class="en">FREE ESTIMATE</div><h2>不用等，<span class="g">30 秒先估個大概</span></h2>
+    <p>把你的空間丟給我們，馬上給你分項報價範圍——不綁約、不亂加價。</p><a class="big" href="#">＋ LINE 免費諮詢 / 報價試算</a></div></div>
+
+  <div class="dots" id="dots"></div>
+  <div class="pgno" id="pgno">01 / 04</div>
+  <div class="arrows"><button onclick="prev()">‹</button><button onclick="next()">›</button></div>
+</section>
+
+<footer class="ft" id="ft">
+  <div class="ftTop">
+    <div><h3>好厝安居</h3><div class="sub">出租屋輕裝修 · 退租一條龍 · 包租代管 · 清潔</div></div>
+    <div class="col"><h5>服務項目</h5><div>出租屋輕裝修<br>退租整理一條龍<br>包租代管<br>專業清潔</div></div>
+    <div class="col"><h5>聯絡我們</h5><div>LINE：@haocuo<br>服務區域：雙北<br>德光國際有限公司（合法登記）</div></div>
+  </div>
+  <div class="cp">© 2026 好厝安居 HaoCuo · 讓每一間房子都住得安心</div>
+</footer>
+
+<a class="floatLine" href="#">＋ LINE 諮詢</a>
+
+<script>
+var slides=document.querySelectorAll('.slide'),n=slides.length,cur=0,timer,pauseT;
+var dotsBox=document.getElementById('dots');
+for(var i=0;i<n;i++){var b=document.createElement('button');b.className='dot'+(i==0?' on':'');b.onclick=(function(k){return function(){go(k)}})(i);dotsBox.appendChild(b)}
+var dots=document.querySelectorAll('.dot');
+function show(k){slides[cur].classList.remove('on');dots[cur].classList.remove('on');cur=(k+n)%n;slides[cur].classList.add('on');dots[cur].classList.add('on');document.getElementById('pgno').textContent='0'+(cur+1)+' / 0'+n;}
+function next(){show(cur+1);userPause();}
+function prev(){show(cur-1);userPause();}
+function go(k){show(k);userPause();}
+function auto(){timer=setInterval(function(){show(cur+1)},12000);}   /* 每12秒自動切換 */
+function userPause(){clearInterval(timer);clearTimeout(pauseT);pauseT=setTimeout(auto,45000);}  /* 客戶一動，暫停45秒讓他看 */
+auto();
+</script>
+</body></html>
