@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打造你自己的 LINE AI 行政助手｜好厝教學</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf6ef; --card:#ffffff; --ink:#3d332a; --ink2:#7a6f62; --line:#ece3d4;
+    --walnut:#5a3a28; --walnut2:#7a5540; --gold:#b8925a; --gold-deep:#9a7440; --gold-soft:#f3ead8;
+    --ok:#5f7c58; --ok-soft:#eaf0e6;
+    --code:#2d2822; --codebar:#3a342b; --codetext:#ece3d2; --codekey:#d8b98a;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    line-height:1.75;font-size:17px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:840px;margin:0 auto;padding:0 22px 90px}
+  .serif{font-family:"Noto Serif TC",serif}
+
+  /* hero */
+  .hero{text-align:center;padding:52px 0 10px}
+  .mark{width:52px;height:52px;margin:0 auto 22px;border-radius:14px;
+    background:linear-gradient(150deg,var(--gold),var(--walnut));
+    box-shadow:0 12px 26px -12px rgba(90,58,40,.5);display:grid;place-items:center}
+  .mark span{color:#fff;font-family:"Noto Serif TC",serif;font-weight:900;font-size:26px}
+  h1{font-size:30px;line-height:1.4;margin:0 0 12px;font-weight:900;letter-spacing:.5px;color:var(--walnut)}
+  .hero p{color:var(--ink2);font-size:16.5px;max-width:580px;margin:0 auto}
+  .brandtag{display:inline-block;margin-top:18px;font-size:13px;color:var(--gold-deep);
+    background:var(--gold-soft);border-radius:999px;padding:6px 18px;font-weight:700;letter-spacing:1px}
+
+  /* tab nav */
+  .tabs{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;
+    position:sticky;top:0;z-index:10;background:rgba(250,246,239,.97);backdrop-filter:blur(6px);
+    padding:16px 0 12px;margin:20px 0 4px;border-bottom:1px solid var(--line)}
+  .tab{border:none;background:transparent;color:var(--ink2);font-family:inherit;
+    padding:9px 18px;border-radius:8px;font-size:15.5px;font-weight:700;cursor:pointer;
+    transition:.15s;border-bottom:2px solid transparent}
+  .tab:hover{color:var(--walnut)}
+  .tab.on{color:var(--walnut);border-bottom-color:var(--gold)}
+
+  .panel{display:none;animation:fade .25s}
+  .panel.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  .ptitle{font-size:14.5px;color:var(--ink2);margin:28px 0 22px;text-align:center;letter-spacing:.5px}
+
+  /* link rows (tab1) */
+  .lrow{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:19px 4px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .lrow .lbl{font-weight:900;font-size:16.5px;color:var(--walnut)}
+  .lrow .lbl small{display:block;font-size:13px;font-weight:500;color:var(--ink2);margin-top:3px}
+  .lrow .val{display:flex;align-items:center;gap:8px}
+  a.plink{color:var(--gold-deep);font-weight:700;text-decoration:none;font-size:15px;word-break:break-all}
+  a.plink:hover{text-decoration:underline}
+  .cbox{display:inline-flex;align-items:center;background:var(--code);border-radius:9px;overflow:hidden}
+  .cbox code{color:var(--codekey);font-family:"SF Mono",Consolas,monospace;font-size:13.5px;padding:9px 12px;white-space:nowrap;max-width:58vw;overflow-x:auto}
+  .cbtn{background:var(--gold);border:none;color:#fff;padding:9px 12px;cursor:pointer;font-size:14px;display:grid;place-items:center;font-weight:700}
+  .cbtn.done{background:var(--ok)}
+  .cbtn.mini{border-radius:8px;padding:6px 12px;font-size:12.5px;flex:0 0 auto}
+  .lrow .val{align-items:center}
+  .cbox .clink{color:var(--codekey);font-family:"SF Mono",Consolas,monospace;font-size:13.5px;padding:9px 12px;text-decoration:none;white-space:nowrap;max-width:56vw;overflow-x:auto}
+  .cbox .clink:hover{text-decoration:underline}
+
+  .checklist{margin:32px 0 0;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 18px rgba(90,58,40,.05)}
+  .checklist h4{margin:0 0 14px;font-size:15px;color:var(--walnut);font-weight:900}
+  .checklist div{display:flex;gap:11px;padding:8px 0;font-size:15px;align-items:flex-start}
+  .checklist .ck{color:var(--gold-deep);flex:0 0 auto;font-weight:900}
+
+  /* steps (tab2) */
+  .step{display:flex;gap:16px;margin:8px 0 28px}
+  .num{flex:0 0 36px;height:36px;border-radius:50%;background:var(--gold-soft);color:var(--walnut);
+    border:1.5px solid var(--gold);font-weight:900;display:grid;place-items:center;font-size:16px}
+  .num.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+  .step .body{flex:1;min-width:0}
+  .step h3{margin:3px 0 7px;font-size:19px;font-weight:900;color:var(--walnut)}
+  .step p,.step li{color:var(--ink2);font-size:15.5px;margin:5px 0}
+  .step ol{margin:6px 0;padding-left:20px}
+  .chip{display:inline-block;background:var(--gold-soft);color:var(--gold-deep);font-weight:700;border-radius:6px;padding:1px 8px;font-size:14px}
+  .codeblock{background:var(--code);border-radius:12px;margin:12px 0;overflow:hidden}
+  .codeblock .bar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--codebar);color:#c7bca7;font-size:13px;font-weight:600}
+  .codeblock pre{margin:0;padding:14px;overflow-x:auto;color:var(--codetext);font-size:14px;line-height:1.75;font-family:"SF Mono",Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+  .codeblock .cbtn{border-radius:8px;padding:7px 13px;font-weight:800;font-size:13px}
+  .note{background:var(--gold-soft);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:14px 17px;margin:14px 0;font-size:15px;color:var(--walnut)}
+  .key{background:#fbeede;border-left:4px solid var(--walnut);border-radius:0 10px 10px 0;padding:14px 17px;margin:14px 0;font-size:15px;color:var(--walnut);font-weight:500}
+
+  /* master prompt (tab3) */
+  .mp-lead{color:var(--ink2);font-size:15.5px;margin:0 0 16px}
+  .bigcode{background:var(--code);border-radius:16px;overflow:hidden;margin:14px 0}
+  .bigcode .bar{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--codebar);color:var(--codekey);font-size:14px;font-weight:700}
+  .bigcode pre{margin:0;padding:18px;max-height:60vh;overflow:auto;color:var(--codetext);font-size:13px;line-height:1.72;font-family:"SF Mono",Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+  .bigcode .cbtn{border-radius:9px;padding:9px 16px;font-weight:800}
+
+  /* workflow (tab4) */
+  .flow{margin:6px 0}
+  .fitem{display:flex;gap:18px;padding:16px 0;position:relative}
+  .fnum{flex:0 0 40px;height:40px;border-radius:50%;background:var(--walnut);color:#fff;font-weight:900;display:grid;place-items:center;font-size:17px;font-family:"Noto Serif TC",serif}
+  .fitem h3{margin:5px 0 5px;font-size:18.5px;font-weight:900;color:var(--walnut)}
+  .fitem p{margin:0;color:var(--ink2);font-size:15.5px}
+  .fline{position:absolute;left:20px;top:56px;bottom:-16px;width:2px;background:var(--line)}
+  .fitem:last-child .fline{display:none}
+
+  .cta{margin:44px 0 0;background:linear-gradient(150deg,var(--walnut),var(--walnut2));color:#fff;border-radius:20px;padding:34px 26px;text-align:center}
+  .cta h2{margin:0 0 10px;font-size:23px;font-family:"Noto Serif TC",serif;font-weight:900}
+  .cta p{color:#ecdfd0;max-width:520px;margin:0 auto 20px;font-size:15.5px}
+  .cta a{display:inline-block;background:var(--gold);color:#fff;font-weight:800;padding:13px 32px;border-radius:999px;text-decoration:none}
+  .foot{text-align:center;color:var(--ink2);font-size:13px;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="mark"><span>好</span></div>
+    <h1 class="serif">打造你自己的<br>LINE AI 行政助手</h1>
+    <p>把一張對話截圖傳進 LINE，AI 幫你讀懂「誰、要做什麼、什麼時候」，自動排進 Google 行事曆、到點提醒。跟著四個分頁，一步步把它建起來。</p>
+    <div class="brandtag">好厝安居 · 教學系列</div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab on" data-t="t1">相關連結</button>
+    <button class="tab" data-t="t2">設定步驟</button>
+    <button class="tab" data-t="t3">提示詞</button>
+    <button class="tab" data-t="t4">工作流</button>
+  </nav>
+
+  <!-- TAB 1 -->
+  <section class="panel on" id="t1">
+    <p class="ptitle">先把這些頁面打開、帳號準備好（點連結，或按複製）</p>
+
+    <div class="lrow">
+      <div class="lbl">Node.js<small>安裝 Claude Code 之前要先有它，選 LTS 版</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://nodejs.org" target="_blank">nodejs.org</a><button class="cbtn" data-copy="https://nodejs.org">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">安裝 Claude Code<small>本教學的主角，讓它幫你自動建整套</small></div>
+      <div class="val"><span class="cbox"><code>npm install -g @anthropic-ai/claude-code</code><button class="cbtn" title="複製">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">Claude Connectors 設定<small>需付費方案，可新增連接器</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://claude.ai/settings/connectors" target="_blank">claude.ai/settings/connectors</a><button class="cbtn" data-copy="https://claude.ai/settings/connectors">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">LINE Developers（建 LINE 官方帳號）<small>建 Messaging API channel、取得 Token</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://developers.line.biz" target="_blank">developers.line.biz</a><button class="cbtn" data-copy="https://developers.line.biz">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">Google AI Studio（Gemini 金鑰）<small>負責讀懂截圖的 AI，有免費額度</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a><button class="cbtn" data-copy="https://aistudio.google.com/apikey">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">Apps Script API 開關<small>務必先打開，否則後面部署會失敗</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://script.google.com/home/usersettings" target="_blank">script.google.com/home/usersettings</a><button class="cbtn" data-copy="https://script.google.com/home/usersettings">複製</button></span></div>
+    </div>
+    <div class="lrow">
+      <div class="lbl">Google Apps Script<small>程式會建在這裡（Claude 自動幫你建）</small></div>
+      <div class="val"><span class="cbox"><a class="clink" href="https://script.google.com" target="_blank">script.google.com</a><button class="cbtn" data-copy="https://script.google.com">複製</button></span></div>
+    </div>
+
+    <div class="checklist">
+      <h4>開始前，確認你有這三個帳號</h4>
+      <div><span class="ck">・</span><span><b>Claude 帳戶</b>：需付費方案（Pro 以上），並能安裝 Claude Code。</span></div>
+      <div><span class="ck">・</span><span><b>Google 帳戶</b>：用來跑 Apps Script 與放行事曆，平常的 Gmail 就可以。</span></div>
+      <div><span class="ck">・</span><span><b>LINE 官方帳號</b>：在 LINE Developers 建一個 Messaging API channel（下一頁教）。</span></div>
+    </div>
+  </section>
+
+  <!-- TAB 2 -->
+  <section class="panel" id="t2">
+    <p class="ptitle">照順序做，完全沒程式底子也能跟。前幾步在準備工具，第六步把整套交給 Claude</p>
+
+    <div class="step"><div class="num">1</div><div class="body">
+      <h3>先打開「終端機」</h3>
+      <p>後面很多步要在「終端機」（一個打指令的黑色小視窗）裡貼指令。先學會打開它：</p>
+      <ol>
+        <li><b>Windows</b>：按左下角開始鍵、打「<span class="chip">cmd</span>」、按 Enter。</li>
+        <li><b>Mac</b>：按 <span class="chip">⌘ + 空白鍵</span>、打「<span class="chip">Terminal</span>」、按 Enter。</li>
+      </ol>
+      <p>之後所有「在終端機輸入」的指令，都是貼進這個視窗、按 Enter。</p>
+    </div></div>
+
+    <div class="step"><div class="num">2</div><div class="body">
+      <h3>安裝 Node.js</h3>
+      <p>Claude Code 要靠它才能安裝。到 <span class="chip">nodejs.org</span> 下載 LTS 版、一路下一步裝完。<b>裝完後把終端機視窗關掉、重新打開一次</b>（不然它抓不到），再輸入下面這行，有出現版本號（例如 v20.x）才繼續：</p>
+      <div class="codeblock"><div class="bar"><span>確認安裝</span><button class="cbtn">複製</button></div><pre>node -v</pre></div>
+    </div></div>
+
+    <div class="step"><div class="num">3</div><div class="body">
+      <h3>安裝 Claude Code</h3>
+      <p>在終端機輸入：</p>
+      <div class="codeblock"><div class="bar"><span>安裝指令</span><button class="cbtn">複製</button></div><pre>npm install -g @anthropic-ai/claude-code</pre></div>
+      <div class="note">若出現 permission／EACCES 之類的紅字（權限不足）：Mac 使用者在指令最前面加 <span class="chip">sudo </span> 再跑一次（會要你輸入電腦開機密碼）。</div>
+    </div></div>
+
+    <div class="step"><div class="num">4</div><div class="body">
+      <h3>打開 Apps Script API ＋ 授權</h3>
+      <p>先到下面網址，把「Apps Script API」切成開啟（不開，之後 Claude 建專案會失敗）：</p>
+      <div class="codeblock"><div class="bar"><span>Apps Script 設定</span><button class="cbtn">複製</button></div><pre>https://script.google.com/home/usersettings</pre></div>
+      <p>再讓工具有權部署（會開瀏覽器，用你的 Google 帳號按一次「允許」）：</p>
+      <div class="codeblock"><div class="bar"><span>授權指令</span><button class="cbtn">複製</button></div><pre>npx @google/clasp login</pre></div>
+      <div class="note">第一次跑會問你「是否安裝 clasp 套件？」，輸入 <span class="chip">y</span> 按 Enter 即可。</div>
+    </div></div>
+
+    <div class="step"><div class="num">5</div><div class="body">
+      <h3>建立 LINE 官方帳號 ＋ Messaging API</h3>
+      <ol>
+        <li>到 <span class="chip">developers.line.biz</span> 用 LINE 登入 → 建一個 <b>Provider</b>。</li>
+        <li>建一個 <b>Messaging API channel</b>（會對應一個 LINE 官方帳號）。</li>
+        <li><b>Messaging API</b> 分頁 → 捲到最下面「Channel access token」區、按 <b>Issue</b> 發行，複製這串 <span class="chip">長期 token</span>。</li>
+        <li><b>Basic settings</b> 分頁：記下 <span class="chip">Channel secret</span>。</li>
+        <li>到 <b>LINE Official Account Manager → 回應設定</b>：關掉「自動回應訊息」與「歡迎訊息」、打開「Webhook」。</li>
+      </ol>
+      <div class="note">不關自動回應，客戶只會收到 LINE 內建罐頭回覆，會誤以為壞掉。</div>
+    </div></div>
+
+    <div class="step"><div class="num">6</div><div class="body">
+      <h3>讓 Claude 串接上（重點）</h3>
+      <p>這一步你要做的很單純，其餘交給 Claude：</p>
+      <ol>
+        <li>在終端機輸入 <span class="chip">claude</span> 開一個新的 Claude Code 對話，把「提示詞」那頁的<b>主指令</b>整段貼進去。</li>
+        <li>Claude 會反問你要四個字串，<b>直接在這個 Claude 對話視窗裡把它們貼回去</b>：<br>
+          <span class="chip">GEMINI_API_KEY</span> <span class="chip">CALENDAR_ID</span> <span class="chip">LINE_CHANNEL_ACCESS_TOKEN</span> <span class="chip">LINE_CHANNEL_SECRET</span></li>
+        <li>Claude 會自動建程式、部署成網頁應用程式、把網址接上 LINE webhook。</li>
+        <li><b>最後一步一定要你自己做</b>：照 Claude 的指示回到 Apps Script 編輯器、執行一次 <span class="chip">setup</span> 函式，這時會跳出授權畫面，<b>按「允許」</b>（授權讀寫行事曆與對外連線）。</li>
+      </ol>
+      <div class="key">★ 第 4 小點最容易被漏掉：不回編輯器跑一次 setup 並按「允許」，截圖傳進來時程式會因為沒授權而沒反應。看似部署好卻不動，通常就是卡在這。</div>
+    </div></div>
+
+    <div class="step"><div class="num ok">7</div><div class="body">
+      <h3>測試與驗證</h3>
+      <p>先加自己的官方帳號好友：<b>在 LINE Developers 的 Messaging API 分頁有一個 QR code，用手機 LINE 掃它</b>，就能把你剛建的官方帳號加為好友。然後傳一張「對話截圖」給它。收到「事件／時間／地點／已排行事曆」的整理卡，就代表串接成功。</p>
+      <div class="note">若 Claude 跑 LINE 的 webhook 驗證時顯示失敗，別緊張——那常是雲端第一次啟動較慢造成，以「實際傳一張截圖有沒有回卡」為準。</div>
+    </div></div>
+  </section>
+
+  <!-- TAB 3 -->
+  <section class="panel" id="t3">
+    <p class="ptitle">Claude Code 設定完，把這一整段「主指令」貼給它，它會自動建好整套</p>
+    <p class="mp-lead">這段已內建關鍵修正：先把今天日期與台北時區餵給 AI（否則「明天／下週三」會算錯）、一張圖支援多筆待辦、正確處理 LINE 取圖與回覆、讀錯可回一句話糾正，並在部署前完成授權。金鑰只存進系統屬性、不寫死在程式碼裡。</p>
+
+    <div class="bigcode"><div class="bar"><span>主指令（貼給 Claude Code）</span><button class="cbtn">一鍵複製</button></div><pre># 任務：幫我自動建置並部署一套「LINE AI 行政助手」
+
+你是一位資深自動化工程師。請幾乎全自動地幫我建好一套系統：
+「LINE 傳截圖 → Gemini 讀懂 → 抽出待辦(誰/做什麼/何時) → 寫進 Google 行事曆 → 用 LINE 回覆確認卡」，
+並部署上線、接好 LINE webhook。全程用繁體中文白話跟我講，每一步先說你要做什麼。
+
+## 鐵律
+1. 需要我手動的地方，要明確、逐步、附網址地請我做，等我回「好了」再繼續，絕不假裝已完成。
+2. 金鑰只寫進 Apps Script 的「指令碼屬性」，永遠不寫死在程式碼、不印在對話裡。
+3. 每完成一個里程碑就回報一句進度。
+
+## 第 0 步：前置確認（請我先做完再繼續）
+- 確認我已安裝 Node.js（請我跑 `node -v` 有版本號）。
+- 請我到 https://script.google.com/home/usersettings 打開「Apps Script API」。
+- 請我跑 `npx @google/clasp login`，瀏覽器按「允許」。等我回報成功再往下。
+
+## 第 1 步：收集金鑰（一次問齊，做基本格式檢查）
+GEMINI_API_KEY、CALENDAR_ID、LINE_CHANNEL_ACCESS_TOKEN、LINE_CHANNEL_SECRET。
+CALENDAR_ID：用主行事曆就填我的 Gmail；若是自建行事曆，請我去行事曆設定複製那串
+以 @group.calendar.google.com 結尾的 ID（否則 getCalendarById 會回 null）。
+
+## 第 2 步：建立專案骨架（在 ~/line-admin-assistant）
+- 寫 appsscript.json：時區 "Asia/Taipei"；webapp.access "ANYONE_ANONYMOUS"、
+  executeAs "USER_DEPLOYING"；oauthScopes 含 script.external_request 與 calendar。
+  ★因為 executeAs 是「我本人」，且 webhook 由 LINE 匿名打進來、匿名呼叫者無法代為授權，
+  所以行事曆與對外連線權限，必須由我本人在部署前先手動授權一次（見第 4 步）。
+- 執行 `npx @google/clasp create --type standalone --title "我的LINE行政助手"`。
+
+## 第 3 步：寫主程式 Code.gs
+- doPost(e)：解析 LINE events[]；對 message.type==="image" 的事件：
+  用 messageId 呼叫 https://api-data.line.me/v2/bot/message/{id}/content（帶 Bearer token）取圖 →
+  Utilities.base64Encode。讀圖 → 有日期就寫行事曆 → 回覆確認卡。最後一律回 HTTP 200。
+- 回覆策略（★replyToken 約 1 分鐘會失效，Gemini 讀圖可能較慢）：
+  先用 replyToken 秒回一則「收到，正在幫你整理…」；整理完的確認卡改用 push message
+  （POST https://api.line.me/v2/bot/message/push，to 帶 event.source.userId）補送，避免逾時收不到。
+- readScreenshot(base64)：呼叫 gemini-2.5-flash generateContent，temperature 0.2，
+  responseMimeType application/json。送圖「之前」先用
+  Utilities.formatDate(new Date(),"Asia/Taipei",...) 把今天日期與星期塞進提示詞
+  （★沒這步相對日期會全錯）。用下方 PROMPT_READ，回「陣列」(可 0/1/多筆)，沒待辦回 []。
+- 防護：candidates 可能為空或非法 JSON，包 try/catch，壞了回 []，不要整支當掉。
+- createCalendarEvent(task)：CalendarApp.getCalendarById(CALENDAR_ID).createEvent(...)，
+  addPopupReminder(120)。
+- 寫一個 setup() 把四個金鑰寫進 PropertiesService.getScriptProperties()。
+
+## PROMPT_READ（原樣使用，勿塞任何真實客戶資料）
+你是嚴謹的行政助理，只負責抄寫。今天是 {{TODAY}}（{{WEEKDAY}}），時區 Asia/Taipei。
+看這張截圖，抽出所有待辦，回傳 JSON 陣列，每筆：
+{ "title":"誰＋要做什麼", "date":"YYYY-MM-DD，用今天換算明天/下週三等",
+  "time":"HH:MM 24小時制，沒寫留空", "location":"沒有留空", "note":"帶什麼/提前多久",
+  "confidence":"high 或 low" }
+規則：沒有待辦回 []；看不清楚的欄位留空不要猜；人名地址照原文；只回 JSON 陣列。
+
+## 第 4 步：注入金鑰 + 完成授權（這步一定要我本人動手，請明確帶我做）
+- clasp push 上傳程式。
+- 請我到 https://script.google.com 打開這個專案 → 選 setup 函式 → 按「執行」→
+  這時會跳出授權畫面，請我按「允許」（一次同時完成金鑰注入與行事曆/外連授權）。
+  ★不要叫我用 clasp run 注入（那需要另接 GCP 專案，我做不到）；一律用「編輯器手動跑 setup」。
+- 授權完成後才 `npx @google/clasp deploy` 取得 /exec 網址；日後更新都用同一個
+  deploymentId（clasp deploy -i <id>）以保持網址不變。
+
+## 第 5 步：接 LINE webhook + 交付
+- 呼叫 PUT https://api.line.me/v2/bot/channel/webhook/endpoint（帶 Bearer token、body 放 /exec 網址）
+  自動接上 webhook，再 POST .../webhook/test 驗證；若 test 回非 200 也先別判失敗，以實際傳圖為準。
+- 提醒我在 LINE console 開「Use webhook」、關「自動回應」。
+- 印出 Web App 網址、LINE 加好友方式、和「傳一張截圖測試」的指引；提醒我把金鑰從對話清掉。</pre></div>
+  </section>
+
+  <!-- TAB 4 -->
+  <section class="panel" id="t4">
+    <p class="ptitle">串好之後，整條龍是這樣運作的</p>
+    <div class="flow">
+      <div class="fitem"><div class="fnum">1</div><div><h3>你傳截圖到 LINE</h3><p>把對話、預約訊息、報價單截圖，傳給你的 LINE 官方帳號。</p></div><div class="fline"></div></div>
+      <div class="fitem"><div class="fnum">2</div><div><h3>訊息送進 Apps Script</h3><p>LINE 把訊息事件送到你部署的 Google Apps Script（免費雲端程式）。</p></div><div class="fline"></div></div>
+      <div class="fitem"><div class="fnum">3</div><div><h3>Gemini 讀圖、抽出待辦</h3><p>AI 看懂截圖，抓出「誰、做什麼、何時」，並以今天日期把「明天、下週三」換算成實際年月日。</p></div><div class="fline"></div></div>
+      <div class="fitem"><div class="fnum">4</div><div><h3>寫進行事曆並設定提醒</h3><p>自動建立 Google 行事曆事件，並設定提前兩小時提醒，不必自己記。</p></div><div class="fline"></div></div>
+      <div class="fitem"><div class="fnum">5</div><div><h3>LINE 回你一張確認卡</h3><p>回覆整理好的卡片給你確認；若 AI 讀錯，你只要回一句「第二件改成週五下午三點」，它就會修正。</p></div><div class="fline"></div></div>
+    </div>
+
+    <div class="cta">
+      <h2 class="serif">不想自己弄？交給好厝就好</h2>
+      <p>上面這套你能自己照著搭。若你想要開箱即用、由我們幫你部署到你自己的 Google 與 LINE 帳號、調到最順，好厝直接幫你上線。</p>
+      <a href="https://kevin-need11.github.io/haojing-site" target="_blank">了解好厝的服務</a>
+    </div>
+  </section>
+
+  <div class="foot">© 好厝安居 · 本頁為教學用途，範例中所有人名地址皆為虛構</div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});
+      document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      document.getElementById(b.dataset.t).classList.add('on');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+  document.querySelectorAll('.cbtn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var text=btn.dataset.copy;
+      if(!text){var host=btn.closest('.cbox')||btn.closest('.codeblock')||btn.closest('.bigcode');text=host.querySelector('code,pre').innerText;}
+      var done=function(){var o=btn.textContent;btn.textContent='已複製';btn.classList.add('done');
+        setTimeout(function(){btn.textContent=o;btn.classList.remove('done')},1500);};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(function(){fb(text);done();});}
+      else{fb(text);done();}
+    });
+  });
+  function fb(t){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
+</script>
+</body>
+</html>
