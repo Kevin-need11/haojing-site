@@ -32,11 +32,11 @@
     background:var(--gold-soft);border-radius:999px;padding:6px 18px;font-weight:700;letter-spacing:1px}
 
   /* tab nav */
-  .tabs{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;
+  .tabs{display:flex;gap:clamp(1px,1vw,6px);justify-content:center;flex-wrap:nowrap;
     position:sticky;top:0;z-index:10;background:rgba(250,246,239,.97);backdrop-filter:blur(6px);
     padding:16px 0 12px;margin:20px 0 4px;border-bottom:1px solid var(--line)}
-  .tab{border:none;background:transparent;color:var(--ink2);font-family:inherit;
-    padding:9px 18px;border-radius:8px;font-size:15.5px;font-weight:700;cursor:pointer;
+  .tab{border:none;background:transparent;color:var(--ink2);font-family:inherit;white-space:nowrap;
+    padding:9px clamp(8px,3.2vw,18px);border-radius:8px;font-size:clamp(13px,3.6vw,15.5px);font-weight:700;cursor:pointer;
     transition:.15s;border-bottom:2px solid transparent}
   .tab:hover{color:var(--walnut)}
   .tab.on{color:var(--walnut);border-bottom-color:var(--gold)}
